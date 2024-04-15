@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\MainController;
 
 // Route::get('/', function () {
 //     $html = '<h1>Big Boss </h1>';
@@ -78,7 +79,16 @@ Route::prefix('categories')->group(function () {
 });
 
 
-Route::middleware('auth.admin')->prefix('admin')->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::middleware('auth.admin.product')->resource('products', ProductsController::class);
+// Route::prefix('admin')->group(function () {
+//     Route::get('/', [DashboardController::class, 'index']);
+//     Route::middleware('auth.admin.product')->resource('products', ProductsController::class);
+// });
+
+//---------------------------------------------------------
+Route::prefix('auth')->group(function () {
+    Route::get('login', [MainController::class, 'login'])->name('login');
+    Route::get('register', [MainController::class, 'register'])->name('register');
+    Route::post('save', [MainController::class, 'storeReg'])->name('registerStore');
 });
+
+Route::post('/', [MainController::class, 'loginCheck'])->name('app.dashboard');
