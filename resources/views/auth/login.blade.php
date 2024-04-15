@@ -91,11 +91,11 @@
 <body>
     <div class="login-container">
         <div class="logo-container">PHP</div>
-        <h2>Login</h2>
+        <h2>Đăng nhập</h2>
 
         <form action="{{ route('app.dashboard')}}" method="POST">
             @csrf
-            @if (Session::get('thatbai'))
+            @if (Session::has('thatbai'))
             <div style="color: red"> {{ Session::get('thatbai')}}</div>
             @endif
             <div class="form-group">

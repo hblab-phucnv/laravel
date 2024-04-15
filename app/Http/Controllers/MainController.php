@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class MainController extends Controller
 {
@@ -19,7 +21,7 @@ class MainController extends Controller
         ]);
 
         $userinfoEmail = User::where('email', $request->ten_dang_nhap)->first();
-        $userinfoUser = User::where('Ten_dang_nhap', $request->ten_dang_nhap)->first();
+        $userinfoUser = User::where('ten_dang_nhap', $request->ten_dang_nhap)->first();
 
         if (!$userinfoEmail) {
             if (!$userinfoUser) {
@@ -76,6 +78,6 @@ class MainController extends Controller
             'password' => Hash::make($request->input('password')),
             'id_phan_quyen' => '2',
         ]);
-        return redirect()->route('auth.login');
+        return redirect()->route('login');
     }
 }
