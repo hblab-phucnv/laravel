@@ -1,0 +1,10 @@
+<?php
+
+namespace App\IRepositories;
+
+interface IGiayRepository extends IRepository
+{
+    public function findBy($condition, $value);
+
+    public function orderBy($condition, $sort);
+}

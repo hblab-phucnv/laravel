@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProductsController;
 
 // Route::get('/', function () {
 //     $html = '<h1>Big Boss </h1>';
@@ -87,8 +87,15 @@ Route::prefix('categories')->group(function () {
 //---------------------------------------------------------
 Route::prefix('auth')->group(function () {
     Route::get('login', [MainController::class, 'login'])->name('login');
+    Route::post('login', [MainController::class, 'loginCheck'])->name('loginCheck');
     Route::get('register', [MainController::class, 'register'])->name('register');
-    Route::post('save', [MainController::class, 'storeReg'])->name('registerStore');
+    Route::post('register', [MainController::class, 'registerStore'])->name('registerStore');
+    Route::get('forgot', [MainController::class, 'forgot'])->name('forgot');
+    Route::post('checkAccountExist', [MainController::class, 'checkAccountExist'])->name('checkAccountExist');
+    Route::get('checkCode', [MainController::class, 'checkCode'])->name('checkCode');
 });
 
-Route::post('/', [MainController::class, 'loginCheck'])->name('app.dashboard');
+
+Route::prefix('product')->group(function () {
+    Route::get('/', [ProductsController::class, 'getAll'])->name('getAll');
+});
