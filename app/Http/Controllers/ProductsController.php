@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Repositories\GiayRepository;
 
 class ProductsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    protected $giayRepository;
+
+    public function __construct(GiayRepository $giayRepository)
     {
+        $this->giayRepository = $giayRepository;
+    }
+
+    public function getAll()
+    {
+        $result = $this->giayRepository->getAll();
+        return view('product/home');
     }
 
     /**

@@ -93,7 +93,7 @@
         <div class="logo-container">PHP</div>
         <h2>Đăng nhập</h2>
 
-        <form action="{{ route('app.dashboard')}}" method="POST">
+        <form action="{{ route('loginCheck')}}" method="POST">
             @csrf
             @if (Session::has('thatbai'))
             <div style="color: red"> {{ Session::get('thatbai')}}</div>
@@ -107,10 +107,10 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
             </div>
             <button type="submit" class="btn btn-primary btn-login">Đăng nhập</button>
-            <button class="btn btn-primary btn-login"><a href="{{ route('register')}}">Đăng kí</a></button>
+            <button class="btn btn-primary btn-login"><a style="text-decoration: none;" href="{{ route('register')}}">Đăng kí</a></button>
             <div class="forgot">
-                <input type="checkbox" value="" id="remember_me" /> Ghi nhớ tài khoản
-                <br><a href="/forgot">Quên mật khẩu ?</a>
+                <input type="checkbox" name="remember" id="remember" /> Ghi nhớ tài khoản
+                <br><a style="text-decoration: none;" href="{{ route('forgot') }}">Quên mật khẩu ?</a>
             </div>
         </form>
     </div>
