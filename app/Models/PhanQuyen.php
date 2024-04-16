@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-abcabc
-=======
 <?php
 
 namespace App\Models;
@@ -20,4 +17,3 @@ class PhanQuyen extends Model
 
     protected $fillable = ['ten_phan_quyen'];
 }
->>>>>>> Stashed changes
