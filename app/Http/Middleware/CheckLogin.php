@@ -16,15 +16,9 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        // echo 'Middleware Request';
-        if (!this->isLogin()) {
-            return redirect(route('home'));
+        if (Auth::check() && Auth::user()->getId_phan_quyen == '1') {
+            return $next($request);
         }
-        return $next($request);
-    }
-
-    public function isLogin()
-    {
-        return false;
+        return redirect(route('login'));
     }
 }

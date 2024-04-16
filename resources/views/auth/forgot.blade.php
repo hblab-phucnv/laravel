@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng kí</title>
+    <title>Quên mật khẩu</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -91,35 +91,17 @@
 <body>
     <div class="login-container">
         <div class="logo-container">PHP</div>
-        <h2>Đăng kí</h2>
-
-        <form action="{{ route('registerStore') }}" method="POST">
+        <form action="{{ route('checkAccountExist')}}" method="POST">
             @csrf
+            @if (Session::has('notfound'))
+            <div style="color: red"> {{ Session::get('notfound')}}</div>
+            @endif
             <div class="form-group">
-                <label for="ten_nguoi_dung">Tên người dùng:</label>
-                <input type="text" class="form-control" id="ten_nguoi_dung" name="ten_nguoi_dung" autofocus autocomplete="ten_nguoi_dung" required>
+                <label for="username">Tên đăng nhập hoặc email:</label>
+                <input type="text" class="form-control" id="username" name="ten_dang_nhap" placeholder="Nhập tên đăng nhập hoặc email" required>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
-                <div style="color: red">@error('email') {{ $message }} @enderror</div>
-            </div>
-            <div class="form-group">
-                <label for="sdt">Số điện thoại:</label>
-                <input type="text" class="form-control" id="sdt" name="sdt" required>
-            </div>
-            <div class="form-group">
-                <label for="ten_dang_nhap">Tên đăng nhập:</label>
-                <input type="text" class="form-control" id="ten_dang_nhap" name="ten_dang_nhap" required>
-                <div>@error('Ten_dang_nhap') {{ $message }} @enderror </div>
-            </div>
-            <div class="form-group">
-                <label for="password">Mật khẩu:</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-                <div> @error('password') {{ $message }} @enderror </div>
-            </div>
-            <button class="btn btn-primary btn-login" type="submit">Đăng kí</button>
-            <button class="btn btn-primary btn-login" type="button"><a style="text-decoration: none;" href="{{ route('login') }}">Đăng nhập</a></button>
+            <button type="submit" class="btn btn-primary btn-login">Lấy mã</button>
+            <button class="btn btn-primary btn-login"><a style="text-decoration: none;" href="{{ route('login')}}">Thoát</a></button>
         </form>
     </div>
 

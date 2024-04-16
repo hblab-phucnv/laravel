@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Giay;
+use App\Models\LoaiGiay;
 use Illuminate\Support\Facades\Hash;
 
 class MainController extends Controller
@@ -20,46 +22,26 @@ class MainController extends Controller
             'password' => 'required | min:5',
         ]);
 
-        $userinfoEmail = User::where('email', $request->ten_dang_nhap)->first();
-        $userinfoUser = User::where('ten_dang_nhap', $request->ten_dang_nhap)->first();
-
-        if (!$userinfoEmail) {
-            if (!$userinfoUser) {
-                return back()->with('thatbai', '* Tên đăng nhập hoặc email không tồn tại!');
+        $remember = $request->has('remember');
+        $user = User::where('email', $request->ten_dang_nhap)->orWhere('ten_dang_nhap', $request->ten_dang_nhap)->first();
+        $giays = Giay::all();
+        $loaigiay = LoaiGiay::all();
+        if (!$user) {
+            return back()->with('thatbai', '* Tên đăng nhập hoặc email không tồn tại!');
+        }
+        if (Hash::check($request->password, $user->password)) {
+            session()->put('Dangnhap', $user->id);
+            if ($user->id_phan_quyen == '1') {
+                session()->put('check', '1');
+                return 'Xin chào admin';
             } else {
-                if (Hash::check($request->password, $userinfoUser->password)) {
-                    $request->session()->put('Dangnhap', $userinfoUser->id);
-                    $data = User::where('id', session('Dangnhap'))->first();
-                    $users = User::all();
-                    if ($userinfoUser->id_phan_quyen == '1') {
-                        session()->put('check', '1');
-                        return 'Xin chào admin';
-                    } else {
-                        session()->put('check', '2');
-                        return 'Xin chào nhân viên';
-                    }
-                } else {
-                    session()->put('check', '0');
-                    return back()->with('thatbai', '* Mật khẩu không đúng, vui lòng nhập lại!');
-                }
+                session()->put('check', '2');
+                return view('home')->with('user', $user)
+                    ->with('loaigiay', $loaigiay)
+                    ->with('giays', $giays);
             }
         } else {
-            if (Hash::check($request->password, $userinfoEmail->password)) {
-                $request->session()->put('Dangnhap', $userinfoUser->id);
-                $data = User::where('id', session('Dangnhap'))->first();
-                $users = User::all();
-
-                if ($userinfoEmail->id_phan_quyen == '1') {
-                    session()->put('check', '1');
-                    return 'Xin chào admin';
-                } else {
-                    session()->put('check', '2');
-                    return 'Xin chào nhân viên';
-                }
-            } else {
-                session()->put('check', '0');
-                return back()->with('thatbai', '* Mật khẩu không đúng, vui lòng nhập lại!');
-            }
+            return back()->with('thatbai', '* Mật khẩu không đúng, vui lòng nhập lại!');
         }
     }
 
@@ -68,7 +50,7 @@ class MainController extends Controller
         return view('auth.register');
     }
 
-    public function storeReg(Request $request)
+    public function registerStore(Request $request)
     {
         User::create([
             'ten_nguoi_dung' => $request->input('ten_nguoi_dung'),
@@ -79,5 +61,28 @@ class MainController extends Controller
             'id_phan_quyen' => '2',
         ]);
         return redirect()->route('login');
+    }
+
+    public function forgot()
+    {
+        return view('auth.forgot');
+    }
+
+    public function checkAccountExist(Request $request)
+    {
+        $request->validate([
+            'ten_dang_nhap' => 'required'
+        ]);
+
+        $user = User::where('email', $request->ten_dang_nhap)->orWhere('ten_dang_nhap', $request->ten_dang_nhap)->first();
+        if (!$user) {
+            return back()->with('notfound', '* Tên đăng nhập hoặc email không tồn tại!');
+        } else {
+            return view('auth.verify')->with('email_nguoi_dung', $user->email);
+        }
+    }
+
+    public function checkcCode(Request $request)
+    {
     }
 }
